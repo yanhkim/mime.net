@@ -6,6 +6,8 @@
 
 .NET Framework 3.0
 
+> Useful when you can't use [MimeMapping][2] which is supported since .NET 4.5
+
 ## API - Queries
 
 ### Mime.Lookup(path)
@@ -57,3 +59,4 @@ Mime.Load(@"C:\Users\foobar\my_project.types");
 ```
 
 [1]: https://github.com/broofa/node-mime
+[2]: http://msdn.microsoft.com/en-us/library/system.web.mimemapping.aspx
