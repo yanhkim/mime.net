@@ -8,7 +8,12 @@ namespace mime.net
     public static class Mime
     {
         private static Dictionary<string, string> types = new Dictionary<string, string>();
-        private static bool loaded;
+
+        static Mime() {
+            LoadContent(Properties.Resources.mimeTypes);
+            LoadContent(Properties.Resources.nodeTypes);
+            DefaultType = Lookup("bin");
+        }
 
         public static string Lookup(string path) {
             string ext = ExtractExtension(path), mime;
@@ -23,17 +28,7 @@ namespace mime.net
         }
 
         private static Dictionary<string, string> Types {
-            get {
-                if (loaded) return types;
-
-                LoadContent(Properties.Resources.mimeTypes);
-                LoadContent(Properties.Resources.nodeTypes);
-                loaded = true;
-
-                DefaultType = Lookup("bin");
-
-                return types;
-            }
+            get { return types; }
         }
 
         public static void Load(string path) {
