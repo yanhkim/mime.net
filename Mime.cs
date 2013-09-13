@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace mime.net
 {
@@ -25,8 +26,8 @@ namespace mime.net
             get {
                 if (loaded) return types;
 
-                Load(Properties.Resources.mimeTypes);
-                Load(Properties.Resources.nodeTypes);
+                LoadContent(Properties.Resources.mimeTypes);
+                LoadContent(Properties.Resources.nodeTypes);
                 loaded = true;
 
                 DefaultType = Lookup("bin");
@@ -35,9 +36,20 @@ namespace mime.net
             }
         }
 
-        private static void Load(string content) {
-            var map = new Dictionary<string, IEnumerable<string>>();
+        public static void Load(string path) {
+            if (!File.Exists(path)) {
+                throw new FileNotFoundException("Invalid path: " + path);
+            }
+            LoadContent(File.ReadAllLines(path));
+        }
+
+        private static void LoadContent(string content) {
             var lines = Regex.Split(content, @"[\r\n]+");
+            LoadContent(lines);
+        }
+
+        private static void LoadContent(string[] lines) {
+            var map = new Dictionary<string, IEnumerable<string>>();
             foreach (var line in lines) {
                 var striped = Regex.Replace(line, @"\s*#.*|^\s*|\s*$", String.Empty);
                 var fields = Regex.Split(striped, @"\s+");
